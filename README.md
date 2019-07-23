@@ -20,7 +20,8 @@ To change filter copy the cbpf assembly from the cbpfprogs file and paste it in 
 Based on the filter you choose to use you should accordingly uncomment/comment the functions to print the correct headers.
 
 ## EXAMPLE
-
+![example](https://github.com/midist0xf/cbpfexamples/blob/master/pingheaders.png)
+![example](https://github.com/midist0xf/cbpfexamples/blob/master/pinglo.png)
 
 
 ## FILTERS EXPLANATION
