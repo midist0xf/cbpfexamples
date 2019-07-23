@@ -9,7 +9,7 @@ cbpfprogs file contains different filters with different level of complexity.
 
 ```gcc cbpfexample.c -o cbpfexample ```
 
-```sudo setcap CAP_NET_RAW+ep ./cbpfexample ```
+```sudo setcap cap_net_raw+ep ./cbpfexample ```
 
 ```./cbpfexample [-i ifname]```
 
