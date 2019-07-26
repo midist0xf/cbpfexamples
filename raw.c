@@ -89,12 +89,12 @@ void print_ip_header(unsigned char* buffer){
    dst.sin_addr.s_addr = iph->daddr;
 
    printf("IP Header\n");
- 	printf("    +Version           : %u\n", (unsigned int)iph->version);
-	printf("    +IHL               : %u\n", (iph->ihl)*4);
-	printf("    +TOS               : %u\n", iph->tos);
+   printf("    +Version           : %u\n", (unsigned int)iph->version);
+   printf("    +IHL               : %u\n", (iph->ihl)*4);
+   printf("    +TOS               : %u\n", iph->tos);
    printf("    +IP Total Length   : %u B\n", ntohs(iph->tot_len));
    printf("    +Identification    : %u\n", ntohs(iph->id));
-	printf("    +Fragment offset   : %u\n", ntohs(iph->frag_off));
+   printf("    +Fragment offset   : %u\n", ntohs(iph->frag_off));
    printf("    +TTL               : %u\n", iph->ttl);
    printf("    +Protocol          : %u\n", iph->protocol);
    printf("    +Checksum          : %u\n", ntohs(iph->check));
@@ -213,7 +213,7 @@ int main(int argc, char *argv[]){
    int sfd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL)); 
    if( sfd < 0){
       perror("socket");
-		exit(EXIT_FAILURE);
+      exit(EXIT_FAILURE);
    }
 
    struct sock_fprog bpf = { sizeof(bpfcode)/sizeof(struct sock_filter), bpfcode};
@@ -248,17 +248,17 @@ int main(int argc, char *argv[]){
       int r;
       r = recvfrom(sfd, buffer, sizeof(buffer), 0,  (struct sockaddr *)&addr, (socklen_t*)&saddr_len);
       if(r < 0){
-			perror("recvfrom");
-         exit(EXIT_FAILURE);
-		}
-      
+	  perror("recvfrom");
+          exit(EXIT_FAILURE);
+      }
+	   
       print_ethernet_header(buffer);
-		print_ip_header(buffer);
-		print_icmp_header(buffer);
-		//print_tcp_header(buffer);
-		//print_udp_header(buffer);
+      print_ip_header(buffer);
+      print_icmp_header(buffer);
+      //print_tcp_header(buffer);
+      //print_udp_header(buffer);
    }
 
-	close(sfd);
+   close(sfd);
    
 }
