@@ -12,7 +12,7 @@ macros
 
 Copy filter instructions (in the format 2 or 3) and paste  
 them in the initialization block of struct sock_prog bpfcode[]
-within cbpfexample.c.
+within raw.c.
 Uncomment/comment the functions to print the correct headers.
 
 ================== IP4 =====================================
@@ -227,6 +227,75 @@ linux/filter.h macros
  BPF_STMT(BPF_RET+BPF_K, 0x40000),                  
  /* discard the packet */                             
  BPF_STMT(BPF_RET+BPF_K, 0),   
+
+============== udp and src port 1030 =======================
+
+tcpdump 'udp and src port 1030' -d
+
+(000) ldh      [12]
+(001) jeq      #0x86dd          jt 2   jf 6
+(002) ldb      [20]
+(003) jeq      #0x11            jt 4   jf 15
+(004) ldh      [54]
+(005) jeq      #0x406           jt 14  jf 15
+(006) jeq      #0x800           jt 7   jf 15
+(007) ldb      [23]
+(008) jeq      #0x11            jt 9   jf 15
+(009) ldh      [20]
+(010) jset     #0x1fff          jt 15  jf 11
+(011) ldxb     4*([14]&0xf)
+(012) ldh      [x + 14]
+(013) jeq      #0x406           jt 14  jf 15
+(014) ret      #262144
+(015) ret      #0
+
+tcpdump 'udp and src port 1030' -dd
+
+{ 0x28, 0, 0, 0x0000000c },
+{ 0x15, 0, 4, 0x000086dd },
+{ 0x30, 0, 0, 0x00000014 },
+{ 0x15, 0, 11, 0x00000011 },
+{ 0x28, 0, 0, 0x00000036 },
+{ 0x15, 8, 9, 0x00000406 },
+{ 0x15, 0, 8, 0x00000800 },
+{ 0x30, 0, 0, 0x00000017 },
+{ 0x15, 0, 6, 0x00000011 },
+{ 0x28, 0, 0, 0x00000014 },
+{ 0x45, 4, 0, 0x00001fff },
+{ 0xb1, 0, 0, 0x0000000e },
+{ 0x48, 0, 0, 0x0000000e },
+{ 0x15, 0, 1, 0x00000406 },
+{ 0x6, 0, 0, 0x00040000 },
+{ 0x6, 0, 0, 0x00000000 },
+
+linux/filter.h macros
+
+/* check if the ethernet type field is ip6 */
+BPF_STMT(BPF_LD+BPF_H+BPF_ABS, 12),
+BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x86dd, 0, 4),
+/* check if the next header field is UDP */
+BPF_STMT(BPF_LD+BPF_B+BPF_ABS, 20),
+BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x11, 0, 11),
+/* check if the UPD header src port is 1030 */
+BPF_STMT(BPF_LD+BPF_B+BPF_ABS, 54),
+BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x406, 8, 9),
+/* check if the ethernet type field is ip4 */
+BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x800, 0, 8),
+/* check if the ip4 header protocol field is UDP */
+BPF_STMT(BPF_LD+BPF_B+BPF_ABS, 23),
+BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x11, 0, 6),
+/* check if ip4 header fragment offset is 0 */
+BPF_STMT(BPF_LD+BPF_H+BPF_ABS, 20), 
+BPF_JUMP(BPF_JMP+BPF_JSET+BPF_K, 0x1fff, 4, 0),
+/* load ip4 header length in the index register */
+BPF_STMT(BPF_LDX+BPF_B+BPF_MSH, 14),
+/* check if UDP src port is 1030 */
+BPF_STMT(BPF_LD+BPF_H+BPF_IND, 14),
+BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x406, 0, 1),
+/* return the entire packet */
+BPF_STMT(BPF_RET+BPF_K, 0x4000),
+/* discard the packet */
+BPF_STMT(BPF_RET+BPF_K, 0),
 
 ============== udp port 67 and port 68  ==================== 
 
