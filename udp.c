@@ -51,6 +51,49 @@ struct sock_filter bpfcode[] = {
    */
 
 
+   /* src port 1030 rewritten with macro */
+   /*
+   // check if UDP src port field is 1030 
+   BPF_STMT(BPF_LD+BPF_H+BPF_ABS, 0),
+   BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x406, 0, 1),
+   // return the entire packet 
+   BPF_STMT(BPF_RET+BPF_K, 0x40000),
+   // discard the packet 
+   BPF_STMT(BPF_RET+BPF_K, 0),
+   */
+
+
+   /* tcpdump udp and src port 1030 -dd rewritten with macro */
+   /*
+   // check if the ethernet type field is ip6 
+   BPF_STMT(BPF_LD+BPF_H+BPF_ABS, 12),
+   BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x86dd, 0, 4),
+   // check if the next header field is UDP 
+   BPF_STMT(BPF_LD+BPF_B+BPF_ABS, 20),
+   BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x11, 0, 11),
+   // check if the UPD header src port is 1030 
+   BPF_STMT(BPF_LD+BPF_B+BPF_ABS, 54),
+   BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x406, 8, 9),
+   // check if the ethernet type field is ip4 
+   BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x800, 0, 8),
+   // check if the ip4 header protocol field is UDP 
+   BPF_STMT(BPF_LD+BPF_B+BPF_ABS, 23),
+   BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x11, 0, 6),
+   // check if ip4 header fragment offset is 0 
+   BPF_STMT(BPF_LD+BPF_H+BPF_ABS, 20), 
+   BPF_JUMP(BPF_JMP+BPF_JSET+BPF_K, 0x1fff, 4, 0),
+   // load ip4 header length in the index register 
+   BPF_STMT(BPF_LDX+BPF_B+BPF_MSH, 14),
+   // check if UDP src port is 1030 
+   BPF_STMT(BPF_LD+BPF_H+BPF_IND, 14),
+   BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, 0x406, 0, 1),
+   // return the entire packet 
+   BPF_STMT(BPF_RET+BPF_K, 0x40000),
+   // discard the packet 
+   BPF_STMT(BPF_RET+BPF_K, 0),
+   */
+
+
 };
 
 int main(int argc, char *argv[]){
