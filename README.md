@@ -1,4 +1,5 @@
-# cbpfexample
+# cbpfexamples
+## PACKET FILTERING
 
 Two C programs to show how to attach a cBPF filter program to a raw socket or to
 an udp socket.
@@ -7,9 +8,9 @@ cbpfprogs file contains different filters with different level of complexity
 that can be used in raw.c.
 
 
-## USAGE
+### USAGE
 
-### raw
+#### raw
 
 ```gcc raw.c -o raw ```
 
@@ -23,7 +24,7 @@ To change filter copy the cbpf assembly from the cbpfprogs file and paste it in 
 
 Based on the filter you choose to use you should accordingly uncomment/comment the functions to print the correct headers.
 
-### udp
+#### udp
 
 ```gcc udp.c -o udp ```
 
@@ -37,13 +38,13 @@ and then
 
 ```nc -p 1031 -u localhost 55555```
 
-## EXAMPLE
-### raw
-![example](https://github.com/midist0xf/cbpfexamples/blob/master/pingheaders.png)
-![example](https://github.com/midist0xf/cbpfexamples/blob/master/pinglo.png)
-### udp
-![example](https://github.com/midist0xf/cbpfexamples/blob/master/udpnc.png)
-![example](https://github.com/midist0xf/cbpfexamples/blob/master/udp.png)
+### EXAMPLE
+#### raw
+![example](https://github.com/midist0xf/cbpfexamples/blob/master/packetfiltering/pingheaders.png)
+![example](https://github.com/midist0xf/cbpfexamples/blob/master/packetfiltering/pinglo.png)
+#### udp
+![example](https://github.com/midist0xf/cbpfexamples/blob/master/packetfiltering/udpnc.png)
+![example](https://github.com/midist0xf/cbpfexamples/blob/master/packetfiltering/udp.png)
 
-## FILTERS EXPLANATION
+### FILTERS EXPLANATION
 [To do]
