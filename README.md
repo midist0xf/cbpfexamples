@@ -77,3 +77,6 @@ gcc -o strictdupmacro strictdupmacro.c
 ```
 ### EXAMPLE
 #### strictexlib
+![example](https://github.com/midist0xf/cbpfexamples/blob/master/seccomp/libexportpfc.png)
+#### strictdup
+![example](https://github.com/midist0xf/cbpfexamples/blob/master/seccomp/stracestrictdup.png)
