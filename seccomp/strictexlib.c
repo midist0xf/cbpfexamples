@@ -26,7 +26,7 @@ int main(int argc, char **argv){
 
 	/* susbstitute SCMP_ACT_KILL with SCMP_ACT_TRAP to
 	 * debug using strace */
-	ctx = seccomp_init(SCMP_ACT_TRAP);
+	ctx = seccomp_init(SCMP_ACT_KILL);
 
 	if (ctx == NULL){
 		_exit(EXIT_FAILURE);
@@ -72,16 +72,16 @@ int main(int argc, char **argv){
 	 * the line below and the call to seccomp_export_pfc to 
 	 * see how the priority affect the position of the system
 	 * call in the filter. */
-	r = seccomp_syscall_priority(ctx, SCMP_SYS(fstat), 1); 
-	if (r<0) seccomp_release(ctx);
+	//r = seccomp_syscall_priority(ctx, SCMP_SYS(fstat), 1); 
+	//if (r<0) seccomp_release(ctx);
 
 	/* load the filter into the kernel */
 	r = seccomp_load(ctx);
 	if (r<0) seccomp_release(ctx);
 
         /* write to stdout human readable format of the filter */	
-	r = seccomp_export_pfc(ctx, STDOUT_FILENO);
-	if (r<0) seccomp_release(ctx);
+	//r = seccomp_export_pfc(ctx, STDOUT_FILENO);
+	//if (r<0) seccomp_release(ctx);
 
 	/* release the filter state */
 	seccomp_release(ctx);
