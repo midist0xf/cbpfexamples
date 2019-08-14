@@ -21,22 +21,22 @@ struct sock_filter  bpfcode[] = {
 	BPF_STMT(BPF_LD+BPF_W+BPF_ABS, (offsetof (struct seccomp_data, nr))),
 	/* check if the syscall number is allowed */
 	/* _exit */
-	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_exit, 0, 1),
+	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_exit, 0, 1),
 	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),
 	/* exit_group */
-	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_exit_group, 0, 1),
+	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_exit_group, 0, 1),
 	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),
 	/* write */
-	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_write, 0, 1),
+	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_write, 0, 1),
 	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),
 	/* read */
-	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_read, 0, 1),
+	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_read, 0, 1),
 	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),
 	/* sigreturn */
-	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_rt_sigreturn, 0, 1),
+	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_rt_sigreturn, 0, 1),
 	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),
 	/* dup(STDOUT_FILENO) */
-        BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_dup, 0, 3), 
+        BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_dup, 0, 3), 
         BPF_STMT(BPF_LD+BPF_W+BPF_ABS,(offsetof (struct seccomp_data, args[0]))),
 	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, STDOUT_FILENO, 0, 1),
 	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		_exit(EXIT_FAILURE);
 	}
 
-	if (syscall(SYS_seccomp, SECCOMP_SET_MODE_FILTER, 0, &bpf)) {
+	if (syscall(__NR_seccomp, SECCOMP_SET_MODE_FILTER, 0, &bpf)) {
 		printf("seccomp");
 		exit(EXIT_FAILURE);
 	}
@@ -70,5 +70,5 @@ int main(int argc, char **argv)
 	/* Uncomment and compare the results */
 	//int fd2 = dup(STDERR_FILENO);
 
-	return 0;
+	_exit(EXIT_SUCCESS);
 }

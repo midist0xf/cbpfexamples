@@ -11,12 +11,12 @@ int main(int argc, char **argv)
    /* activate seccomp strict mode */ 
    if(prctl(PR_SET_SECCOMP, SECCOMP_MODE_STRICT) == -1){
       printf("prctl seccomp_mode_strict\n");
-      syscall(SYS_exit, EXIT_FAILURE);
+      syscall(__NR_exit, EXIT_FAILURE);
    }
 
    /* syscall(2) invokation allows to call kernel's 
     * _exit syscall*/
-   syscall(SYS_exit, EXIT_SUCCESS);
+   syscall(__NR_exit, EXIT_SUCCESS);
 
    /* With _exit the process gets killed because since
     * glibc 2.3 _exit is a wrapper for exit_group(2)

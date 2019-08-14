@@ -31,7 +31,7 @@ struct sock_filter  bpfcode[] = {
 	/* sigreturn */
 	ALLOW_SYSCALL(rt_sigreturn),
 	/* dup(STDOUT_FILENO) */
-        BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_dup, 0, 3), 
+        BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_dup, 0, 3), 
         BPF_STMT(BPF_LD+BPF_W+BPF_ABS,(offsetof (struct seccomp_data, args[0]))),
 	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, STDOUT_FILENO, 0, 1),
 	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW),

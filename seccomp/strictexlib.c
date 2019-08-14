@@ -88,8 +88,6 @@ int main(int argc, char **argv){
 
 	/* test the filter with some calls */
 	int fd1 = dup(STDOUT_FILENO);
-	/* Uncomment the line below to produce human readable
-	 * filter's instructions */
 
 	int fd = open("hello.txt", O_WRONLY|O_CREAT, S_IWUSR|S_IRUSR );
 

@@ -10,7 +10,7 @@
 	BPF_STMT(BPF_LD+BPF_W+BPF_ABS, syscall_num)
 
 #define ALLOW_SYSCALL(syscall_name) \
-	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, SYS_##syscall_name, 0, 1), \
+	BPF_JUMP(BPF_JMP+BPF_JEQ+BPF_K, __NR_##syscall_name, 0, 1), \
 	BPF_STMT(BPF_RET+BPF_K, SECCOMP_RET_ALLOW)
 
 #define KILL_THREAD \
