@@ -77,6 +77,8 @@ gcc -o strictdupmacro strictdupmacro.c
 ```
 ### EXAMPLE
 #### strictexlib
+With ```seccomp_syscall_priority``` and ```seccomp_export_pfc``` uncommented.
 ![example](https://github.com/midist0xf/cbpfexamples/blob/master/seccomp/libexportpfc.png)
 #### strictdup
+Executed using  ```strace```  with  ```SECCOMP_RET_TRAP``` and with   ```dup(STDERR_FILENO)``` uncommented.
 ![example](https://github.com/midist0xf/cbpfexamples/blob/master/seccomp/stracestrictdup.png)
